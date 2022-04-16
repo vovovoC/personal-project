@@ -69,12 +69,7 @@ export const DashboardSidebar = (props) => {
           <Box sx={{ p: 3 }}>
             <NextLink href="/" passHref>
               <a>
-                <Logo
-                  sx={{
-                    height: 42,
-                    width: 42,
-                  }}
-                />
+                <img src="/static/logo.png" width="70" height="70px" />
               </a>
             </NextLink>
           </Box>
@@ -96,7 +91,7 @@ export const DashboardSidebar = (props) => {
                   Acme Inc
                 </Typography>
                 <Typography color="neutral.400" variant="body2">
-                  Your tier : Premium
+                  Welcome to chinese product
                 </Typography>
               </div>
               <SelectorIcon
