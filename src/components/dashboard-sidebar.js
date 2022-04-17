@@ -9,28 +9,18 @@ import { Cog as CogIcon } from "../icons/cog";
 import { Lock as LockIcon } from "../icons/lock";
 import { Selector as SelectorIcon } from "../icons/selector";
 import { ShoppingBag as ShoppingBagIcon } from "../icons/shopping-bag";
-import { User as UserIcon } from "../icons/user";
-import { UserAdd as UserAddIcon } from "../icons/user-add";
-import { Users as UsersIcon } from "../icons/users";
-import { XCircle as XCircleIcon } from "../icons/x-circle";
-import { Logo } from "./logo";
 import { NavItem } from "./nav-item";
 
 const items = [
-  {
-    href: "/",
-    icon: <ChartBarIcon fontSize="small" />,
-    title: "Dashboard",
-  },
   {
     href: "/products",
     icon: <ShoppingBagIcon fontSize="small" />,
     title: "Products",
   },
   {
-    href: "/settings",
-    icon: <CogIcon fontSize="small" />,
-    title: "Settings",
+    href: "/",
+    icon: <ChartBarIcon fontSize="small" />,
+    title: "Dashboard",
   },
 ];
 
