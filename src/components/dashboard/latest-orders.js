@@ -20,73 +20,15 @@ import {
   TableSortLabel,
   TextField,
   Tooltip,
+  Typography,
 } from "@mui/material";
 import { SeverityPill } from "../severity-pill";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Form, FormikProvider, useFormik } from "formik";
-
-const orders = [
-  {
-    id: uuid(),
-    ref: "CDD1049",
-    amount: 30.5,
-    customer: {
-      name: "Ekaterina Tankova",
-    },
-    createdAt: 1555016400000,
-    status: "pending",
-  },
-  {
-    id: uuid(),
-    ref: "CDD1048",
-    amount: 25.1,
-    customer: {
-      name: "Cao Yu",
-    },
-    createdAt: 1555016400000,
-    status: "delivered",
-  },
-  {
-    id: uuid(),
-    ref: "CDD1047",
-    amount: 10.99,
-    customer: {
-      name: "Alexa Richardson",
-    },
-    createdAt: 1554930000000,
-    status: "refunded",
-  },
-  {
-    id: uuid(),
-    ref: "CDD1046",
-    amount: 96.43,
-    customer: {
-      name: "Anje Keizer",
-    },
-    createdAt: 1554757200000,
-    status: "pending",
-  },
-  {
-    id: uuid(),
-    ref: "CDD1045",
-    amount: 32.54,
-    customer: {
-      name: "Clarke Gillebert",
-    },
-    createdAt: 1554670800000,
-    status: "delivered",
-  },
-  {
-    id: uuid(),
-    ref: "CDD1044",
-    amount: 16.76,
-    customer: {
-      name: "Adam Denisov",
-    },
-    createdAt: 1554670800000,
-    status: "delivered",
-  },
-];
+import StarBorderIcon from "@mui/icons-material/StarBorder";
+import StarIcon from "@mui/icons-material/Star";
+import { doc, setDoc } from "firebase/firestore/lite";
+import db from "src/shared/lib/firebase";
 
 const style = {
   position: "absolute",
@@ -112,6 +54,37 @@ export const LatestOrders = (props) => {
     onSubmit: () => {},
   });
   const { handleSubmit, getFieldProps } = formik;
+  const [productOrders, setProductOrders] = useState([]);
+  useEffect(() => {
+    const items = window.localStorage.getItem("busket");
+    if (items) {
+      const parse = JSON.parse(items);
+      setProductOrders(Object.keys(parse).map((res) => parse[res]));
+    }
+  }, []);
+  const random = () => {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  };
+  const onOrder = () => {
+    const ordersAr = [];
+    for (const data of productOrders) {
+      ordersAr.push(
+        setDoc(doc(db, "orders", random()), {
+          product: {
+            ...data,
+          },
+          ...formik.values,
+        })
+      );
+    }
+    Promise.all(ordersAr).then(() => {
+      handleClose();
+      window.localStorage.setItem("busket", "");
+      setProductOrders([]);
+    });
+  };
   return (
     <>
       <Card {...props}>
@@ -121,41 +94,52 @@ export const LatestOrders = (props) => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Order Ref</TableCell>
+                  <TableCell>Name of product</TableCell>
                   <TableCell sortDirection="desc">
                     <Tooltip enterDelay={300} title="Sort">
                       <TableSortLabel active direction="desc">
-                        Date
+                        Cost
                       </TableSortLabel>
                     </Tooltip>
                   </TableCell>
-                  <TableCell>Status</TableCell>
+                  <TableCell>Rating</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {orders.map((order) => (
-                  <TableRow hover key={order.id}>
-                    <TableCell>{order.ref}</TableCell>
-                    <TableCell>{format(order.createdAt, "dd/MM/yyyy")}</TableCell>
-                    <TableCell>
-                      <SeverityPill
-                        color={
-                          (order.status === "delivered" && "success") ||
-                          (order.status === "refunded" && "error") ||
-                          "warning"
-                        }
-                      >
-                        {order.status}
-                      </SeverityPill>
+                {productOrders.map((order, id) => (
+                  <TableRow hover key={id}>
+                    <TableCell width="50%">{order.name}</TableCell>
+                    <TableCell sx={{ fontWeight: "bold" }}>{order.price}$</TableCell>
+                    <TableCell sx={{ display: "flex", alignItems: "center" }}>
+                      {Array.from({ length: order.star }).map((i, key) => (
+                        <StarIcon color="primary" key={key} />
+                      ))}
+                      {Array.from({ length: 3 - order.star }).map((i, key) => (
+                        <StarBorderIcon color="primary" key={key} />
+                      ))}
                     </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
+            {productOrders.length === 0 ? (
+              <Typography sx={{ textAlign: "center", margin: "20px" }} variant="h6">
+                Empty store
+              </Typography>
+            ) : null}
           </Box>
         </PerfectScrollbar>
-        <Box textAlign={"center"} sx={{ padding: "10px" }}>
-          <Button variant="contained" onClick={() => setOpen(true)}>
+        <Box
+          textAlign={"center"}
+          sx={{
+            padding: "10px",
+          }}
+        >
+          <Button
+            variant="contained"
+            onClick={() => setOpen(true)}
+            disabled={!productOrders.length}
+          >
             Order
           </Button>
         </Box>
@@ -197,7 +181,7 @@ export const LatestOrders = (props) => {
           </FormikProvider>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} autoFocus>
+          <Button onClick={onOrder} autoFocus>
             Order
           </Button>
         </DialogActions>
