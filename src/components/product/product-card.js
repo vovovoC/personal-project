@@ -3,7 +3,6 @@ import { Avatar, Box, Button, Card, CardContent, Divider, Grid, Typography } fro
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import StarIcon from "@mui/icons-material/Star";
-import actions from "src/store/constants";
 
 export const ProductCard = ({
   product,
