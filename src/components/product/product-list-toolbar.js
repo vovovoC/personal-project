@@ -6,10 +6,10 @@ import {
   InputAdornment,
   SvgIcon,
   Typography,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
 } from "@mui/material";
-import { Download as DownloadIcon } from "../../icons/download";
-import { Search as SearchIcon } from "../../icons/search";
-import { Upload as UploadIcon } from "../../icons/upload";
 
 export const ProductListToolbar = (props) => (
   <Box {...props}>
@@ -34,21 +34,27 @@ export const ProductListToolbar = (props) => (
     <Box sx={{ mt: 3 }}>
       <Card>
         <CardContent>
-          <Box sx={{ maxWidth: 500 }}>
-            <TextField
-              fullWidth
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SvgIcon fontSize="small" color="action">
-                      <SearchIcon />
-                    </SvgIcon>
-                  </InputAdornment>
-                ),
-              }}
-              placeholder="Search product"
-              variant="outlined"
-            />
+          <Typography variant="h6">Sort By</Typography>
+          <Box sx={{ maxWidth: 250, marginTop: "20px" }}>
+            <RadioGroup
+              aria-labelledby="demo-radio-buttons-group-label"
+              defaultValue="price"
+              onChange={props.onRadioGroupChange}
+              name="radio-buttons-group"
+            >
+              <FormControlLabel
+                value="price"
+                sx={{ fontSize: "12px" }}
+                control={<Radio />}
+                label="Price"
+              />
+              <FormControlLabel value="star" control={<Radio />} label="rating" />
+              <FormControlLabel
+                value="sold_items"
+                control={<Radio />}
+                label="Number of sold items"
+              />
+            </RadioGroup>
           </Box>
         </CardContent>
       </Card>

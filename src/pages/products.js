@@ -49,6 +49,13 @@ const Products = () => {
       payload: id,
     });
   };
+  const onRadioGroupChange = (e) => {
+    const copyProducts = [...products];
+    copyProducts.sort(function (a, b) {
+      return a[e.target.value] - b[e.target.value];
+    });
+    setProducts(copyProducts);
+  };
   return (
     <>
       <Head>
@@ -62,7 +69,7 @@ const Products = () => {
         }}
       >
         <Container maxWidth={false}>
-          <ProductListToolbar />
+          <ProductListToolbar onRadioGroupChange={onRadioGroupChange} />
           <Box sx={{ pt: 3 }}>
             <Grid container spacing={3}>
               {products.map((product, id) => (
