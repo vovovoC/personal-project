@@ -56,6 +56,13 @@ const Products = () => {
     });
     setProducts(copyProducts);
   };
+  const searchProducts = (e) => {
+   let newPro = [...products];
+    newPro = newPro.filter(product =>
+      product.name.toLowerCase().includes(e.target.value.toLowerCase().trim())
+    )
+    setProducts(newPro)
+  };
   return (
     <>
       <Head>
@@ -69,7 +76,7 @@ const Products = () => {
         }}
       >
         <Container maxWidth={false}>
-          <ProductListToolbar onRadioGroupChange={onRadioGroupChange} />
+          <ProductListToolbar onRadioGroupChange={onRadioGroupChange} searchProducts={searchProducts}/>
           <Box sx={{ pt: 3 }}>
             <Grid container spacing={3}>
               {products.map((product, id) => (

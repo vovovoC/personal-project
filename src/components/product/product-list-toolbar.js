@@ -1,63 +1,52 @@
 import {
   Box,
-  Card,
-  CardContent,
-  TextField,
-  InputAdornment,
-  SvgIcon,
   Typography,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
+  FormControl,
+  Select,
+  InputLabel,
+  MenuItem
 } from "@mui/material";
+import SearchBar from "../settings/search";
 
 export const ProductListToolbar = (props) => (
   <Box {...props}>
+
+<Typography sx={{ m: 1 }} variant="h4">
+        China Express
+      </Typography>
     <Box
       sx={{
-        alignItems: "center",
+        alignItems: "flex-end",
         display: "flex",
         justifyContent: "space-between",
         flexWrap: "wrap",
         m: -1,
       }}
     >
-      <Typography sx={{ m: 1 }} variant="h4">
-        Products
-      </Typography>
-      <Box sx={{ m: 1 }}>
-        {/* <Button color="primary" variant="contained">
-          Add products
-        </Button> */}
-      </Box>
+ <Box sx={{ width: 300, marginTop: "40px" }}>
+    
+    <FormControl sx={{ width: 250, marginTop: "20px" }}>  
+    <InputLabel id="demo-simple-select-label" sx={{backgroundColor:"#f9fafc",paddingLeft: "2px",paddingRight: "2px"}}>Sort by</InputLabel>
+        <Select
+          aria-labelledby="demo-radio-buttons-group-label"
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          onChange={props.onRadioGroupChange}
+          name="radio-buttons-group"
+        >
+          <MenuItem 
+            value="star"      
+            >Rating</MenuItem>
+          <MenuItem 
+            value="price"
+            >Price</MenuItem>
+          <MenuItem 
+            value="sold_items"
+          >Number of sold items</MenuItem>
+        </Select>
+    </FormControl>
     </Box>
-    <Box sx={{ mt: 3 }}>
-      <Card>
-        <CardContent>
-          <Typography variant="h6">Sort By</Typography>
-          <Box sx={{ maxWidth: 250, marginTop: "20px" }}>
-            <RadioGroup
-              aria-labelledby="demo-radio-buttons-group-label"
-              defaultValue="price"
-              onChange={props.onRadioGroupChange}
-              name="radio-buttons-group"
-            >
-              <FormControlLabel
-                value="price"
-                sx={{ fontSize: "12px" }}
-                control={<Radio />}
-                label="Price"
-              />
-              <FormControlLabel value="star" control={<Radio />} label="rating" />
-              <FormControlLabel
-                value="sold_items"
-                control={<Radio />}
-                label="Number of sold items"
-              />
-            </RadioGroup>
-          </Box>
-        </CardContent>
-      </Card>
+    <SearchBar searchProducts={props.searchProducts}/>
     </Box>
   </Box>
 );
